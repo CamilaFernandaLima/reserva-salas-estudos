@@ -19,7 +19,6 @@ public class PoliticaPrimeiroAReservar implements PoliticaDeReserva {
                 return false;
             }
         }
-
         return true;
     }
 }

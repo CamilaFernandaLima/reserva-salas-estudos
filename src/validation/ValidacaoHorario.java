@@ -1,7 +1,6 @@
 package validation;
 
 import model.Reserva;
-import java.time.Duration;
 import java.util.List;
 
 //Handler 2: valida se o intervalo de horário da reserva é coerente.

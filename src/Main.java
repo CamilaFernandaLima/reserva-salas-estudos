@@ -7,7 +7,7 @@ import strategy.PoliticaPrimeiroAReservar;
 import validation.ResultadoValidacao;
 import validation.ValidacaoCapacidade;
 import validation.ValidacaoHandler;
-import validation.ValidacaoHorarioCoerente;
+import validation.ValidacaoHorario;
 import validation.ValidacaoSalaDisponivel;
 import validation.ValidacaoUsuario;
 
@@ -33,11 +33,11 @@ public class Main {
         reservaService.adicionarSala(sala202);
         reservaService.adicionarSala(lab01);
 
-        // Adição da cadeia de validação (Chain of Responsibility)
+        // Adição da cadeia de validação - Chain of Responsibility.
         // Cada handler valida uma regra e, se aprovada, passa ao próximo.
         ValidacaoHandler cadeiaDeValidacao = new ValidacaoUsuario();
         cadeiaDeValidacao
-                .setProximo(new ValidacaoHorarioCoerente())
+                .setProximo(new ValidacaoHorario())
                 .setProximo(new ValidacaoSalaDisponivel())
                 .setProximo(new ValidacaoCapacidade());
 
@@ -69,7 +69,6 @@ public class Main {
                     LocalDateTime inicio = LocalDateTime.of(2026, 5, 20, 10, 0);
                     LocalDateTime fim    = LocalDateTime.of(2026, 5, 20, 11, 0);
 
-                    // Cria uma reserva temporária apenas para rodar a cadeia de validação
                     Reserva reservaParaValidar = new Reserva(usuario, sala202, inicio, fim);
 
                     ResultadoValidacao resultado = cadeiaDeValidacao.validar(
@@ -80,7 +79,6 @@ public class Main {
                     if (!resultado.isValido()) {
                         System.out.println(resultado.getMensagem());
                     } else {
-                        // Cadeia aprovada — delega ao serviço (que aplica a strategy)
                         reservaService.criarReserva(usuario, sala202, inicio, fim);
                     }
                     break;
