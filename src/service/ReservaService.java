@@ -115,4 +115,8 @@ public class ReservaService {
     public void adicionarSala(Sala sala) {
         repository.adicionarSala(sala);
     }
+
+    public List<Reserva> listarTodasReservas() {
+        return repository.listarReservas();
+    }
 }
