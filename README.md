@@ -42,54 +42,6 @@ Utilizado em `ValidacaoHandler`, para implementar a validação das reservas em 
 src/
 docs/
 
-## Funcionalidade: Validação de Reservas
-
-### Descrição
-Esta PR adiciona a seguinte capacidade ao sistema de Reserva de Salas de Estudo:
-
-1. **Validação encadeada** de reservas antes da criação, garantindo que cada reserva passe por múltiplas regras de negócio de forma modular e sequencial.
-
----
-
-### Padrão de Projeto: Chain of Responsibility
-
-**Justificativa:** O processo de validação de uma reserva envolve múltiplas regras independentes e sequenciais. Cada regra é encapsulada em um handler próprio, e se uma falhar, a cadeia é interrompida imediatamente com uma mensagem de erro clara — sem `if`s aninhados ou lógica centralizada.
-
-A cadeia é montada no `Main` da seguinte forma:
-
-```java
-ValidacaoHandler cadeiaDeValidacao = new ValidacaoUsuario();
-cadeiaDeValidacao
-.setProximo(new ValidacaoHorario())
-.setProximo(new ValidacaoSalaDisponivel())
-.setProximo(new ValidacaoCapacidade());
-```
-
-Ordem de execução dos handlers:
-1. **`ValidacaoUsuario`** — verifica se o usuário é não-nulo e possui nome.
-2. **`ValidacaoHorario`** — verifica se início e fim são válidos e coerentes.
-3. **`ValidacaoSalaDisponivel`** — detecta conflitos de horário com reservas existentes.
-4. **`ValidacaoCapacidade`** — impede que estudantes reservem laboratórios.
-
-Cada handler herda de `ValidacaoBase`, que implementa o encadeamento via `setProximo()` com retorno fluente. O resultado é encapsulado em `ResultadoValidacao`, com um booleano e, em caso de falha, a mensagem de erro.
-
----
-
-### Como testar
-
-1. Clone o repositório e acesse a branch desta PR.
-2. Compile e execute a classe `Main`.
-
-**Testar criação com validação (opção 2):**
-- Executa a cadeia de validação antes de criar a reserva.
-- O console exibirá a mensagem de erro do handler que falhou, ou confirmará a criação com o ID da reserva.
-- Para testar falhas, edite o `Main` e tente:
-- `Usuario` com nome vazio → falha no `ValidacaoUsuario`.
-- `inicio` após `fim` → falha no `ValidacaoHorario`.
-- Duas reservas no mesmo horário e sala → falha no `ValidacaoSalaDisponivel`.
-- Reservar `Lab 01` com usuário `ESTUDANTE` → falha no `ValidacaoCapacidade`.
-
-
 ## Autores
 Camila Fernanda e Silva Lima
 Vitor ...
