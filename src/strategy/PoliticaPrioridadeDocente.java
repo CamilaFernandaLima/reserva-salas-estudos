@@ -20,7 +20,6 @@ public class PoliticaPrioridadeDocente implements PoliticaDeReserva {
                 return novaReserva.getUsuario().getTipo() == TipoUsuario.PROFESSOR;
             }
         }
-
         return true;
     }
 }
