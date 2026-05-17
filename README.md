@@ -44,4 +44,5 @@ docs/
 
 ## Autores
 Camila Fernanda e Silva Lima
+
 Vitor Souza
